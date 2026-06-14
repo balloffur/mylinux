@@ -1,0 +1,36 @@
+===================================================================
+ icheck — Universal Network Diagnostic Utility
+===================================================================
+Usage: icheck [COMMAND/ARGUMENT] [URL/IP] [OPTIONS]
+
+If run without arguments (or with -f), a fast check is executed.
+If a URL or IP is provided without dashes (e.g., icheck google.com),
+the utility will check only that specific target (Ping + HTTP/HTTPS).
+
+Commands:
+  update           Fetch and install the latest version from GitHub
+  whois <IP> [-s]  Perform a WHOIS lookup (-s for short summary & VPS check)
+
+Modes (Profiles):
+  -f,  -fast       Fast check: Local IP, Public IP, Ping Google (Default)
+  -m,  -more       Standard check: IP, location, DNS, default targets
+  -a,  -all        Full audit: All IPs, DNS, all targets + Blacklist check
+
+Targeted Checks (can be combined):
+  -l,  -local      Show only Local IP
+  -p,  -public     Show only Public IP and location
+  -d,  -dns        Show only current DNS servers
+  -bl, -blacklist  Check Public IP against anti-spam databases (DNSBL)
+  -proc <name>     Check status and resources of a process (e.g., icheck -proc vpn)
+
+Modifiers & Settings:
+  -t,  -time       Show exact response times (Ping and HTTPS)
+  -timeout <sec>   Timeout for network requests (default: 5 sec)
+  -4,  -ipv4       Force IPv4 only
+  -6,  -ipv6       Force IPv6 only
+  -h,  -help       Show this help message
+
+Configuration Files:
+  Config (Targets): ~/.config/icheck/config.conf
+  Database (Desc):  ~/.config/icheck/database.txt
+===================================================================
