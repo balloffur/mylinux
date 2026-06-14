@@ -1,6 +1,3 @@
-
-# Алиасы для g++
-
 alias gstrict='\
     echo "Режим: СТРОГИЕ ПРЕДУПРЕЖДЕНИЯ (без оптимизаций)"; \
     echo "Цель: найти максимум потенциальных ошибок и подозрительных мест"; \
@@ -40,16 +37,16 @@ alias gturbo='\
     echo ""; \
     g++ -std=c++20 -Ofast -march=native -mtune=native -flto=auto -DNDEBUG -pipe "$@"'
 
-# Просто смена стандарта (без лишнего текста)
 alias g17='g++ -std=c++17 "$@"'
 alias g20='g++ -std=c++20 "$@"'
 alias g23='g++ -std=c++23 "$@"'
 alias g26='g++ -std=c++26 "$@"'
 
-# Быстрый запуск: cr merge.cpp   → компилирует merge.cpp → запускает ./merge
-grun() {
-    local file="${1:-main.cpp}"           # если ничего не передал — берёт main.cpp
-    local exe="${file%.*}"                # убирает .cpp → имя без расширения
+alias realias='source ~/.mylinux/install/galias'
+
+function grun() {
+    local file="${1:-main.cpp}"
+    local exe="${file%.*}"
 
     echo "Компиляция $file → $exe"
     if g++ -std=c++23 -O2 -Wall -Wextra "$file" -o "$exe"; then
@@ -61,7 +58,7 @@ grun() {
     fi
 }
 
-ghelp() {
+function ghelp() {
     cat << 'EOF'
 
   g++-helpers  — быстрые алиасы и функции для C++ (2025–2026)
@@ -69,7 +66,7 @@ ghelp() {
   Компиляция (просто стандарт):
     g17     g++ -std=c++17
     g20     g++ -std=c++20
-    g23     g++ -std=c++23          ← основной выбор сейчас
+    g23     g++ -std=c++23         ← основной выбор сейчас
     g26     g++ -std=c++26
 
   Режимы компиляции:
@@ -89,16 +86,16 @@ ghelp() {
            grun gen.cpp 5 1e5
 
   Утилиты:
-    realias     перезагрузить ~/.galias (source ~/.galias)
-    ghelp       эта справка
+    realias    перезагрузить ~/.mylinux/install/galias
+    ghelp      эта справка
 
   Дополнительно (если добавите позже):
-    gstrict     очень строгие предупреждения (без оптимизаций)
-    cr / crr    альтернативные имена для похожих функций (если захотите)
+    gstrict    очень строгие предупреждения (без оптимизаций)
+    cr / crr   альтернативные имена для похожих функций (если захотите)
 
   Редактирование:
-    vi ~/.galias    → редактировать
-    realias         → применить изменения без перезапуска терминала
+    vi ~/.mylinux/install/galias  → редактировать
+    realias                       → применить изменения без перезапуска терминала
 
 EOF
 }
