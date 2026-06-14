@@ -1,0 +1,2 @@
+alias clp='xclip -selection clipboard'
+alias clps='tee >(xclip -selection clipboard)'
