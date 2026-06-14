@@ -1,0 +1,46 @@
+#!/bin/bash
+
+function install_cpp_tools() {
+    echo "Устанавливаем C++ стек..."
+    # build-essential включает g++, gcc и make. 
+    # Также добавляем инструменты для отладки, сборки и работы с памятью.
+    sudo apt-get install -y \
+        build-essential \
+        gdb \
+        cmake \
+        valgrind \
+        cppcheck \
+        clang-format \
+        libboost-all-dev
+}
+
+function setup_python_env() {
+    echo "Настраиваем виртуальное окружение Python..."
+    sudo apt-get install -y python3 python3-venv python3-pip
+
+    # Создаем директорию и само окружение
+    mkdir -p "$HOME/.mylinux/python"
+    
+    if [ ! -d "$HOME/.mylinux/python/venv" ]; then
+        python3 -m venv "$HOME/.mylinux/python/venv"
+    fi
+
+    # Устанавливаем базовый набор пакетов через pip виртуального окружения.
+    # Включены библиотеки для алгебры (sympy), вычислений (numpy, scipy) и графиков (matplotlib).
+    "$HOME/.mylinux/python/venv/bin/pip" install --upgrade pip
+    "$HOME/.mylinux/python/venv/bin/pip" install \
+        numpy \
+        scipy \
+        matplotlib \
+        sympy \
+        requests \
+        ipython
+}
+
+function main() {
+    install_cpp_tools
+    setup_python_env
+    echo "Установка базового стека завершена."
+}
+
+main
