@@ -1,0 +1,104 @@
+
+# Алиасы для g++
+
+alias gstrict='\
+    echo "Режим: СТРОГИЕ ПРЕДУПРЕЖДЕНИЯ (без оптимизаций)"; \
+    echo "Цель: найти максимум потенциальных ошибок и подозрительных мест"; \
+    echo ""; \
+    echo "Команда:"; \
+    echo "g++ -std=c++20 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wold-style-cast -Wnon-virtual-dtor -Woverloaded-virtual -Wfloat-equal -Wdouble-promotion -Wformat=2 -Wnull-dereference -Wrestrict"; \
+    echo ""; \
+    g++ -std=c++20 -Wall -Wextra -Wpedantic -Wshadow -Wconversion -Wsign-conversion -Wold-style-cast -Wnon-virtual-dtor -Woverloaded-virtual -Wfloat-equal -Wdouble-promotion -Wformat=2 -Wnull-dereference -Wrestrict "$@"'
+
+alias gsan='\
+    echo "Режим: ОТЛАДКА + SANITIZERS (Address + Undefined Behavior)"; \
+    echo "Цель: ловить ошибки памяти, неопределённое поведение на этапе выполнения"; \
+    echo "Оптимизация минимальная (-O1), чтобы санитайзеры работали эффективно"; \
+    echo ""; \
+    echo "Команда:"; \
+    echo "g++ -std=c++20 -g -O1 -Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer"; \
+    echo ""; \
+    g++ -std=c++20 -g -O1 -Wall -Wextra -fsanitize=address,undefined -fno-omit-frame-pointer "$@"'
+
+alias gfast='\
+    echo "Режим: МАКСИМАЛЬНАЯ СКОРОСТЬ (безопасная версия)"; \
+    echo "Используется -O3 + LTO + нативная архитектура процессора"; \
+    echo "Без -Ofast → математика с плавающей точкой остаётся предсказуемой"; \
+    echo ""; \
+    echo "Команда:"; \
+    echo "g++ -std=c++20 -O3 -march=native -mtune=native -flto=auto -DNDEBUG -pipe"; \
+    echo ""; \
+    g++ -std=c++20 -O3 -march=native -mtune=native -flto=auto -DNDEBUG -pipe "$@"'
+
+alias gturbo='\
+    echo "Режим: АГРЕССИВНАЯ ОПТИМИЗАЦИЯ (TURBO)"; \
+    echo "Включает -Ofast → возможны изменения в поведении операций с плавающей точкой!"; \
+    echo "Подходит для задач, где важна каждая миллисекунда и fp-семантика не критична"; \
+    echo ""; \
+    echo "Команда:"; \
+    echo "g++ -std=c++20 -Ofast -march=native -mtune=native -flto=auto -DNDEBUG -pipe"; \
+    echo ""; \
+    g++ -std=c++20 -Ofast -march=native -mtune=native -flto=auto -DNDEBUG -pipe "$@"'
+
+# Просто смена стандарта (без лишнего текста)
+alias g17='g++ -std=c++17 "$@"'
+alias g20='g++ -std=c++20 "$@"'
+alias g23='g++ -std=c++23 "$@"'
+alias g26='g++ -std=c++26 "$@"'
+
+# Быстрый запуск: cr merge.cpp   → компилирует merge.cpp → запускает ./merge
+grun() {
+    local file="${1:-main.cpp}"           # если ничего не передал — берёт main.cpp
+    local exe="${file%.*}"                # убирает .cpp → имя без расширения
+
+    echo "Компиляция $file → $exe"
+    if g++ -std=c++23 -O2 -Wall -Wextra "$file" -o "$exe"; then
+        echo "Запуск ./$exe"
+        ./"$exe"
+    else
+        echo "Ошибка компиляции!"
+        return 1
+    fi
+}
+
+ghelp() {
+    cat << 'EOF'
+
+  g++-helpers  — быстрые алиасы и функции для C++ (2025–2026)
+
+  Компиляция (просто стандарт):
+    g17     g++ -std=c++17
+    g20     g++ -std=c++20
+    g23     g++ -std=c++23          ← основной выбор сейчас
+    g26     g++ -std=c++26
+
+  Режимы компиляции:
+    gfast    -O3 -march=native -flto=auto -DNDEBUG -pipe
+             (безопасный максимум скорости)
+    gturbo   -Ofast + те же флаги
+             (агрессивный, но float-математика может измениться)
+    gsan     -g -O1 + ASan + UBSan + Wall/Wextra
+             (отлов ошибок памяти и UB)
+
+  Компиляция + запуск (самое удобное):
+    grun [файл.cpp] [аргументы...]
+         по умолчанию: grun → grun main.cpp → ./main
+         примеры:
+           grun merge.cpp
+           grun solution.cpp 42 1000000
+           grun gen.cpp 5 1e5
+
+  Утилиты:
+    realias     перезагрузить ~/.galias (source ~/.galias)
+    ghelp       эта справка
+
+  Дополнительно (если добавите позже):
+    gstrict     очень строгие предупреждения (без оптимизаций)
+    cr / crr    альтернативные имена для похожих функций (если захотите)
+
+  Редактирование:
+    vi ~/.galias    → редактировать
+    realias         → применить изменения без перезапуска терминала
+
+EOF
+}
