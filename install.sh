@@ -19,6 +19,12 @@ function fetch_repo() {
     fi
 }
 
+function fetch_small_things() {
+    if [ ! -d "$HOME/.mylinux/small_things" ]; then
+        git clone https://github.com/balloffur/small_things.git "$HOME/.mylinux/small_things"
+    fi
+}
+
 function install_deps() {
     if [ -f "$HOME/.mylinux/install/depend" ]; then
         sudo apt-get install -y $(cat "$HOME/.mylinux/install/depend")
@@ -41,6 +47,9 @@ function setup_permissions() {
     if [ -d "$HOME/.mylinux/scripts" ]; then
         chmod -R +x "$HOME/.mylinux/scripts"
     fi
+    if [ -d "$HOME/.mylinux/small_things" ]; then
+        chmod -R +x "$HOME/.mylinux/small_things"
+    fi
 }
 
 function install_full() {
@@ -53,6 +62,7 @@ function main() {
     update_system
     install_git
     fetch_repo
+    fetch_small_things
     install_deps
     setup_bashrc
     setup_aliases
