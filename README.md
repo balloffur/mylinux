@@ -9,4 +9,4 @@
 **Базовая установка**  
 *(Легкие зависимости, скрипты `icheck`/`cgen` и алиасы)*
 ```bash
-curl -sL [https://raw.githubusercontent.com/balloffur/mylinux/main/install.sh](https://raw.githubusercontent.com/balloffur/mylinux/main/install.sh) | bash
+curl -sL https://raw.githubusercontent.com/balloffur/mylinux/main/install.sh | bash
